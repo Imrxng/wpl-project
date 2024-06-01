@@ -1,0 +1,117 @@
+<%- include("partials/header.ejs") %>
+<style>
+  body {
+      display: none;
+  }
+</style>
+    <main class="draw-test">
+      <section class="decks-container">
+        <script src="https://kit.fontawesome.com/ccd4003a42.js" crossorigin="anonymous"></script>
+
+        <h1 class="ui-hover">Draw Test</h1>
+        <article id="add-deck" class="add-deck">
+          <div class="left-part">
+            <form action="/MagicTheGathering/drawtest" method="post">
+              <select name="deck" class="select-deck" id="deck-select">
+                <option disabled <% if (!deckNumber) { %> selected <%} %> >-- Kies een deck --</option>
+                <% for (let i = 0; i < allDecks.length; i++) { %>
+                  <option value="<%= i + 1 %>" <% if (deckNumber === i + 1) { %> selected <% }; %> ><%= allDecks[i].deckName %></option>                  
+                <% }; %>
+              </select> 
+              <% if (cards) { %>
+                <select name="drawPercentage" class="select-deck card-names-select">
+                  <% for (const card of cards) { %>
+                      <option value="<%= card._id %>" <% if (drawPercentageId === card._id.toString()) { %> selected <% } %> ><%= card.name %></option>
+                  <% }; %>
+                </select>
+              <% }; %>
+            </div>
+            <button class="track-btn">track</button>
+            </form>
+          <h3>
+            <% if (drawPercentage) { %>
+              <%= drawPercentage %>%
+            <% }; %>
+          </h3>
+        </article>
+        <% if (!error) { %>
+            <article id="card-comparaison">
+          <% if (deckName) { %>
+            <h1 id="deckNameDrawtest"><%= deckName %></h1>
+          <% }; %>
+          <div class="holder-comparaison">
+            <% if (!limit60) { %>
+              <img
+              class="compar-img"
+              src="/assets/images/back-card.webp"
+              alt="achterkantCard"
+            />
+            <% } else { %>
+              <img
+              class="compar-img"
+              />
+            <% }; %>
+            <div id="draw-button">
+              <a href="/MagicTheGathering/drawtest/draw"><button class="track-btn">Trekken</button></a>
+              <a href="/MagicTheGathering/drawtest/reset"><button class="track-btn">Reset</button></a>
+              <a href="/MagicTheGathering/drawtest/showpreviouscards"><button class="track-btn">Vorige</button></a>
+            </div>
+            <% if (cards && popupPreviousCards ) { %>
+               
+                <div class="login-error">
+                  <section class="previous-container" >
+                    <p>
+                      <% 
+                      if (index === 0 | !index) { %> 
+                        Er zijn nog geen vorige kaarten 
+                      <% } else { %>
+                        <ol style="list-style: none;">
+                          <% for (let i = 0; i < index; i++) { %> 
+                              <li> -    <%= cards[i].name %> </li> <% 
+                          } %>
+                        </ol>
+                      <% }; %>  
+                    </p> 
+                    <a class="login-error-close" href="/MagicTheGathering/drawtest/closeshowpreviouscards" >Sluiten</a>
+                  </section>
+                
+                </div>
+            <% }; %>
+            <% if (card) { %>
+              <img
+              class="compar-img 
+              <% if (!popupPreviousCards) { %>
+                flip-anim                
+              <% } %>
+              "
+              src="<%= card.imageUrl %>"
+              alt="Card"
+              />
+            <% } else if (limit60) { %>
+              <img
+              class="compar-img"
+              src="/assets/images/back-card.webp"
+              alt="achterkantCard"
+              />
+            <% } else { %>
+              <img 
+             class="compar-img"
+             />
+           <% }; %>
+          </div>
+        </article>
+        <% } else if (error === "leeg") { %>
+          
+        <% } else { %>
+          
+
+            <h4 class="error-leeg"><%=error%></h4>
+          
+        <% }; %>
+      </section>
+      <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            document.body.style.display = 'block';
+        });
+    </script>
+<%- include("partials/footer.ejs") %>

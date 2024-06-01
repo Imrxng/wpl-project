@@ -1,0 +1,170 @@
+<%- include("partials/header.ejs") %>
+
+<% if(limit60) { %>
+<div class="login-error">
+  <section class="login-error-container" >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13 13" style="width:50px; color:#ec4523;">
+      <polyline class="arrow" fill="none" stroke="currentColor" points="1 1,6.5 6.5,12 1"/>
+      <polyline class="arrow" fill="none" stroke="currentColor" points="1 12,6.5 6.5,12 12"/>
+    </svg>
+      <p><%=limit60%></p> 
+      <a class="login-error-close" href="/MagicTheGathering/closeLimit" >Sluiten</a>
+  </section>
+  <% } %>
+
+</div>
+    <main>
+      <section class="hero">
+        <h1 class="title ui-hover">Vind je kaart</h1>
+        <h3 style="font-family: natural; font-size: 1rem;">Art gemaakt door Laxmonaut</h3>
+        <a href="#search-form-id" onclick="scrollBehaviorChange()"><div class="scroll"><img class=" bounce-top" src="/assets/images/scrolldown.webp" alt="scrolldown"></div></a>
+      </section>
+      <section class="card-finder">
+  </div>
+        <form class="search-form" id="search-form-id" action="/MagicTheGathering/home" method="get">
+          <div class="wrapper">
+            <input
+              type="text"
+              id="search"
+              name="search"
+              placeholder="Zoeken " style="font-family:natural; font-size: 1rem;"
+            />
+            <button>
+             <img src="/assets/images/wizardicon.png" width="50px" alt="wizardicon">
+                <title id="title">Zoek Icon</title>
+                <desc id="desc"></desc>
+                <g class="search-path" fill="none" stroke="#848F91">
+                  <path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4" />
+                  <circle cx="8" cy="8" r="7" />
+                </g>
+              </svg>
+            </button>
+          </div>
+        </form>
+        <% let counter = 0; %>
+        
+        <% for (let i = 0; i < cards.length; i++) { %>
+          <div class="info-toggle infonone" id="popup<%=counter%>">
+            <% counter++; %>
+            <article class="wrapper-card">
+              <button class="btn-popup" onclick="closePopUp()"><span style="font-size: 3rem;">ⓧ</span></button>
+              <div class="popup-wrapper">
+                <section class="card-details-holder">
+                  
+                  <img class="popup-img" src="<%=cards[i].imageUrl%>" alt="<%=cards[i].name%>" id="popupCardImg" 
+                  <% if (cards[i].rarity === "Common") { %>
+                    style="box-shadow: 0px 2px 6px 5px rgba(255, 255, 255, 0.6);"
+                  <% } else if (cards[i].rarity === "Uncommon") { %>
+                    style="box-shadow: 0px 2px 6px 5px rgba(18, 80, 179, 0.6);"
+                  <% } else if (cards[i].rarity === "Rare") { %>
+                    style="box-shadow: 0px 2px 6px 5px rgba(174, 186, 85, 0.7);"
+                  <% } else if (cards[i].rarity === "Mythic") { %>
+                    style="box-shadow: 0px 2px 6px 5px rgba(151, 0, 0, 0.9);"
+                  <% }; %>
+                  />
+                  <div class="infos">
+                    <h4>kaart naam</h4>
+                    <br>
+                    <p id="card-name"><%=cards[i].name%></p>
+                    <br>
+                    <hr class="solid" />
+                    <h4>zeldzaamheid</h4>
+                    <br>
+                    <p id="card-rarity"
+                    <% if (cards[i].rarity === "Common") { %>
+                    style="color: rgba(255, 255, 255, 0.6);" 
+                    <% } else if (cards[i].rarity === "Uncommon" ) { %>
+                    style="color: rgba(18, 80, 179, 0.6);" 
+                    <% } else if (cards[i].rarity === "Rare" ) { %>
+                    style="color: rgba(174, 186, 85, 0.7);" 
+                    <% } else if (cards[i].rarity === "Mythic") { %>
+                     style="color: rgba(151, 0, 0, 0.9);" 
+                    <% } %>
+                 >
+                    <%=cards[i].rarity%>
+                   <% if (cards[i].rarity === "Common") { %>
+                    <img src="/assets/images/rarity1.webp" width="20px" alt="Common">
+                    <% } else if (cards[i].rarity === "Uncommon") { %>
+                    <img src="/assets/images/rarity 2.png" width="20px" alt="Uncommon">
+                    <% } else if (cards[i].rarity === "Rare") { %>
+                      <img src="/assets/images/rarity 3.png" width="20px" alt="Rare">
+                    <% } else if (cards[i].rarity === "Mythic") { %>
+                    <img src="/assets/images/rarity 4.png" width="20px" alt="Mythic">
+                    <% } %>
+                  </p>
+                    <br>
+                    <hr class="solid" />
+                    <h4>eigenschappen</h4>
+                    <br>
+                    <p id="card-text"><%=cards[i].text%></p>
+                    <br>
+                    <hr class="solid" />
+                    <h4>type</h4>
+                    <br>
+                    <p id="card-type"><%=cards[i].type%></p>
+                    <br>
+                    <hr class="solid" />
+                    <h4>kaart toevoegen aan deck</h4>
+                    <br>
+                   <form action="/MagicTheGathering/home" class="home-container-select" method="post">
+                      <select name="deck" class="select-deck select-deck-home" id="pet-select">
+                        <% for (let i = 0; i < allDecks.length; i++) { %>
+                          <option value="<%= i + 1 %>"><%= allDecks[i].deckName %></option>
+                        <% }; %>
+                    
+                      </select>
+                      <input type="text" name="id" value="<%= cards[i].id %>" hidden>
+                      <button class="add-deck" id="add-to-deck-btn">+</button>
+                  </form>
+                  <% if (alreadyInDecks && alreadyInDecks[i].deck) { %>
+                      <div class="exists-deck">
+                        <hr class="solid" />
+                        <h4>Zit al in deck(s):</h4>
+                        <p><br><%= alreadyInDecks[i].deck %></p>
+                        
+                      </div>
+                    <% }; %>
+                  </div>
+                </section>
+              </div>
+            </article>
+          </div>        
+        <% }; %>
+        <section class="card-layout">
+          <%- include("partials/legende.ejs") %>
+          <% if(cards.length > 0) { %>
+            <% let counter = 0; %>
+            <% for (const card of cards) { %>
+              <article class="card-holder" id="<%=counter%>">
+              <% counter++; %>
+                <img src="<%=card.imageUrl%>" alt="<%=card.name%>" class="card-img <% if(card.rarity === "Mythic") { %> wobble-hor-bottom <%} %>" 
+                <% if (card.rarity === "Common") { %>
+                  style="box-shadow: 0px 2px 6px 5px rgba(255, 255, 255, 0.5); outline: 1px solid rgb(255, 255, 255);"
+                <% } else if (card.rarity === "Uncommon") { %>
+                  style="box-shadow: 0px 2px 6px 5px rgba(18, 80, 179, 0.5); outline: 1px solid rgb(18, 80, 179);"
+                <% } else if (card.rarity === "Rare") { %>
+                  style="box-shadow: 0px 2px 6px 5px rgba(174, 186, 85, 0.5); outline: 1px solid rgb(174, 186, 85);"
+                <% } else if (card.rarity === "Mythic") { %>
+                  style="box-shadow: 0px 2px 15px 5px rgba(151, 0, 0, 0.8); outline: 1px solid rgb(151, 0, 0);"
+                <% } %>
+                 />
+                <p class="card-name">
+                  <% if (card.rarity === "Common") { %>
+                    <img src="/assets/images/rarity1.webp" width="20px" alt="Common">
+                  <% } else if (card.rarity === "Uncommon") { %>
+                    <img src="/assets/images/rarity 2.png" width="20px" alt="Uncommon">
+                  <% } else if (card.rarity === "Rare") { %>
+                    <img src="/assets/images/rarity 3.png" width="20px" alt="Rare">
+                  <% } else if (card.rarity === "Mythic") { %>
+                    <img src="/assets/images/rarity 4.png" width="20px" alt="Mythic">
+                  <% } %>
+                  <%=card.name%>
+                </p>
+              </article>
+            <% } %>
+          <% } else { %>
+            <p>Geen kaarten gevonden</p>
+          <% }; %>
+        </section>
+      </section>
+<%- include("partials/footer.ejs") %>
